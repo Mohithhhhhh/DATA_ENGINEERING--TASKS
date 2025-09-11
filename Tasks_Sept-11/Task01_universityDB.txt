@@ -1,0 +1,86 @@
+use universityDB
+
+db.students.insertMany([
+  { _id: 1, name: "Rahul Sharma", age: 21, email: "rahul@example.com", city: "Bangalore" },
+  { _id: 2, name: "Priya Singh", age: 22, email: "priya@example.com", city: "Delhi" },
+  { _id: 3, name: "Aman Kumar", age: 20, email: "aman@example.com", city: "Hyderabad" },
+  { _id: 4, name: "Sneha Reddy", age: 23, email: "sneha@example.com", city: "Chennai" }
+]);
+
+db.courses.insertMany([
+  { _id: 101, title: "Database Systems", department: "CS", credits: 4 },
+  { _id: 102, title: "Data Structures", department: "CS", credits: 3 },
+  { _id: 103, title: "Economics 101", department: "Economics", credits: 2 },
+  { _id: 104, title: "Operating Systems", department: "CS", credits: 4 }
+]);
+
+db.enrollments.insertMany([
+  { student_id: 1, course_id: 101, grade: "A" },
+  { student_id: 1, course_id: 103, grade: "B" },
+  { student_id: 2, course_id: 101, grade: "A" },
+  { student_id: 3, course_id: 102, grade: "C" },
+  { student_id: 4, course_id: 104, grade: "B" }
+]);
+
+db.students.insertOne({ _id: 5, name: "Anjali Verma", age: 22, email: "anjali@example.com", city: "Mumbai" });
+
+db.students.find({ city: "Delhi" });
+
+db.students.updateOne({ name: "Aman Kumar" }, { $set: { email: "aman.kumar@example.com" } });
+
+db.students.deleteOne({ name: "Sneha Reddy" });
+
+db.students.createIndex({ email: 1 }, { unique: true });
+
+db.courses.createIndex({ department: 1, credits: -1 });
+
+db.students.getIndexes();
+db.courses.getIndexes();
+
+db.courses.find({ department: "CS", credits: 4 });
+
+db.courses.find({ title: "Economics 101" });
+
+db.enrollments.aggregate([
+  { $group: { _id: "$course_id", student_count: { $sum: 1 } } }
+]);
+
+db.students.aggregate([
+  { $group: { _id: "$city", avg_age: { $avg: "$age" } } }
+]);
+
+db.courses.find({ department: "CS" }).sort({ credits: -1 }).limit(1);
+
+db.enrollments.aggregate([
+  { $lookup: {
+      from: "students",
+      localField: "student_id",
+      foreignField: "_id",
+      as: "student_info"
+  }}
+]);
+
+db.students.aggregate([
+  { $lookup: {
+      from: "enrollments",
+      localField: "_id",
+      foreignField: "student_id",
+      as: "enrollments"
+  }},
+  { $unwind: "$enrollments" },
+  { $lookup: {
+      from: "courses",
+      localField: "enrollments.course_id",
+      foreignField: "_id",
+      as: "course_info"
+  }},
+  { $group: {
+      _id: "$_id",
+      name: { $first: "$name" },
+      courses: { $push: "$course_info" }
+  }}
+]);
+
+db.enrollments.countDocuments({ grade: "A" });
+
+
