@@ -1,0 +1,13 @@
+class student:
+    def __init__(self,name,age):
+        self.name = name
+        self.age = age
+
+    def greet(self):
+        return f"Hello, my name is {self.name} and Iam {self.age} years old."
+
+s1 = student(name: "Rahul", age: 21)
+s2 = student(name: "Priya", age: 22)
+
+print(s1.greet())
+print(s2.greet())

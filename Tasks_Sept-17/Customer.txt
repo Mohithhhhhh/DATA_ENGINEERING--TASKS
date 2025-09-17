@@ -1,0 +1,13 @@
+class Customer:
+    def __init__(self,Firstname,Lastname):
+        self.Firstname = Firstname
+        self.Lastname = Lastname
+
+    def greet(self):
+        return f"Hello, my Firstname is {self.Firstname} and My lastname is {self.Lastname}."
+
+s1 = Customer( Firstname:"Rahul", Lastname:"Sharma")
+s2 = Customer( Firstname:"Priya", Lastname:"Kumari")
+
+print(s1.greet())
+print(s2.greet())

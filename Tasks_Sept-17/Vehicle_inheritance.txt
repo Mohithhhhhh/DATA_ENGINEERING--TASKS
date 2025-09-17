@@ -1,0 +1,29 @@
+
+class Vehicle:
+    def __init__(self, brand, model):
+        self.brand = brand
+        self.model = model
+
+    def display_info(self):
+        return f"Vehicle: {self.brand} {self.model}"
+
+
+
+class Car(Vehicle):
+    def __init__(self, brand, model, doors):
+        # Call parent constructor
+        super().__init__(brand, model)  # Correct usage of super()
+
+        self.doors = doors
+
+    def display_info(self):
+        # Extend parent behavior
+        return f"Car: {self.brand} {self.model}, Doors: {self.doors}"
+
+
+v1 = Vehicle(brand="Tata", model="Truck")
+c1 = Car(brand="Hyundai", model="i20", doors=4)
+
+# Call methods
+print(v1.display_info())
+print(c1.display_info())
